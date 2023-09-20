@@ -42,11 +42,15 @@
             &copy; 2023 - GestionAlumnos - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/js/sweetalert.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/carrera.js"></script>
+
+    @* MIS SCRIPTS *@
+    <script src="~/js/SweetAlert.js"></script>
+    <script src="~/js/Carrera.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

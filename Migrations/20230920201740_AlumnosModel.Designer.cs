@@ -4,6 +4,7 @@ using GestionAlumnos.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionAlumnos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230920201740_AlumnosModel")]
+    partial class AlumnosModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,18 +38,7 @@ namespace GestionAlumnos.Migrations
                     b.Property<string>("AlumnoNombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CarreraID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CarreraNombre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.HasKey("AlumnoID");
-
-                    b.HasIndex("CarreraID");
 
                     b.ToTable("Alumnos");
                 });
@@ -69,34 +60,6 @@ namespace GestionAlumnos.Migrations
                     b.HasKey("CarreraID");
 
                     b.ToTable("Carreras");
-                });
-
-            modelBuilder.Entity("GestionAlumnos.Models.Profesor", b =>
-                {
-                    b.Property<int>("ProfesorID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProfesorID"), 1L, 1);
-
-                    b.Property<int>("ProfesorDNI")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProfesorDireccion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProfesorEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ProfesorNacimiento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProfesorNombre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ProfesorID");
-
-                    b.ToTable("Profesores");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -299,17 +262,6 @@ namespace GestionAlumnos.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("GestionAlumnos.Models.Alumno", b =>
-                {
-                    b.HasOne("GestionAlumnos.Models.Carrera", "Carreras")
-                        .WithMany()
-                        .HasForeignKey("CarreraID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Carreras");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
