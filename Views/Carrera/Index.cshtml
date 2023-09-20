@@ -1,0 +1,66 @@
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<!-- Modal -->
+<div class="modal fade" id="ModalCarrera" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <input type="hidden" id="Id" value="0" />
+        <h5 class="modal-title" id="h1Carrera">Agregar Carrera</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <div id="form-carrera" class="form-group">
+
+            <label class="control-label">Carrera</label>
+            <input type="text" class="form-control" id="textoInput" name="Nombre" autocomplete="off" />
+
+            <label class="control-label">Duracion</label>
+            <input type="number" class="form-control" id="textoInput" name="Duracion" autocomplete="off" />
+
+            <span class="text-danger" id="lbl-error"></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" onclick="GuardarCarrera()" class="btn btn-primary">Guardar Cambios</button>
+        <button type="button" onclick="eliminarCarrera()" class="btn btn-primary">Eliminar</button>
+        <button type="button" onclick="eliminarCarrera()" class="btn btn-primary">Deshabilitar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div>
+    <h1 class="display-4">Carreras</h1>
+
+      <!-- Button trigger modal -->
+      <div class="mb-2">
+        <button type="button" onclick="CrearNueva()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalCarrera">
+            Nuevo
+        </button>
+      </div>
+
+ 
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Duracion</th>
+        </tr>
+    </thead>
+        <tbody id="tbody-carreras">        
+        </tbody>
+  </table>
+</div>
+
+ @section Scripts{
+    <script src="~/js/carrera.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/sweetalert.js"></script>
+}
