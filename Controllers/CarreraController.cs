@@ -21,86 +21,145 @@
      {
          return View();
      }
+
+    public JsonResult CarrerasBuscar(int Id = 0)
+    {
+        var CarrerasListado = _context.Carreras?.ToList();
+        if (Id > 0)
+        {
+            CarrerasListado = CarrerasListado?.Where(c => c.CarreraID == Id).OrderBy(c =>c.CarreraNombre).ToList();
+        }
+        return Json(CarrerasListado);
+    }
+     public JsonResult CarreraGuardar(int id, string nombre, decimal duracion){
+        
+
+        var error = new ValidacionError();
+        error.nonError = false;
+        error.MsjError = "No se pudo guardar la carrera";
+        //SI HAY NOMBRE//
+        if (!string.IsNullOrEmpty(nombre))
+        {   //PONELO EN MAYUSCULA
+            nombre = nombre.ToUpper();
+            //SI ESTAMOS CREANDO UNA CARRERA NUEVA
+            if (id == 0)
+            {   
+                //PRIMERO VERIFICAMOS SI YA EXISTE EN EL CONTEXTO UNA CARRERA 
+                //CON EL NOMBRE QUE ESTAMOS POR INGRESAR
+                var CarreraYaExiste = _context.Carreras?.Where(c => c.CarreraNombre == nombre).FirstOrDefault();
+                if (CarreraYaExiste == null)
+                {   //SI NO EXISTE GUARDAMOS LA CARRERA
+                    var CarreraGuardar = new Carrera
+                    {
+                        CarreraNombre = nombre,
+                        CarreraDuracion = duracion,
+                    };
+                    _context.Add(CarreraGuardar);
+                    _context.SaveChanges();
+                    error.nonError = true;
+                }
+                //SI EXISTE UNA CARRERA SALTA ESTE ERROR
+                else
+                {
+                    error.nonError = false;
+                    error.MsjError = "Ya existe una carrera con ese nombre";
+                }
+            }
+            //SI ESTAMOS EDITANDO UNA CARRERA
+            else
+            {   //COMPROBAMOS SI YA HAY UNA CARRERA CREADA CON EL MISMO NOMBRE
+                var CarreraYaExiste = _context.Carreras?.Where(c => c.CarreraNombre == nombre && c.CarreraID != id).FirstOrDefault();
+                //SI NO LA HAY
+                if (CarreraYaExiste == null)
+                {   //CREAMOS LA VARIABLE DE CARRERA EDITAR
+                    var CarreraEditar = _context.Carreras?.Find(id);
+                    //SI SE ENCUENTRA
+                    if (CarreraEditar != null)
+                    {   //LA GUARDA
+                        CarreraEditar.CarreraNombre = nombre;
+                        CarreraEditar.CarreraDuracion = duracion;
+                        _context.SaveChanges();
+                        error.nonError = true;
+                    }
+                    //VERIFICAMOS SI HAY ALUMNOS RELACIONADOS CON ESTA CARRERA
+                    var AlumnosRelacionados =_context.Alumnos?.Where(a => a.CarreraID == id).ToList();
+                    if (AlumnosRelacionados != null)
+                    {   //SI LOS HAY SE LES CAMBIA AUTOMATICAMENTE EL NOMBRE DE LA CARRERA
+                        //TAMBIÉN
+                        AlumnosRelacionados?.ForEach(a => a.CarreraNombre = nombre);
+                        _context.SaveChanges();
+                    }
+                }
+                //SI YA HAY UNA CARRERA CREADA CON EL MISMO NOMBRE:
+                else
+                {   //TIRAMOS MENSAJE DE ERROR
+                    error.nonError = false;
+                    error.MsjError = "Imposible editar, ya existe una carrera con el mismo nombre";
+                }
+            }
+        }
+        return Json(error);
      }
 
 
+public JsonResult CarreraEliminar(int id)
+{
+    var error = new ValidacionError();
+    error.nonError = false;
+    error.MsjError = "No se seleccionó ninguna carrera";
+    //si existe una carrera
+    if (id != 0)
+    {   
+
+        var CarreraYaExiste = _context.Carreras.Find(id);
+        if (CarreraYaExiste?.Eliminado == false)//SI NO ESTA DESHABILITADA SE LA DESHABILITA
+        {   //se verifica si posee alumnos relacionados y los cuenta
+            var AlumnoExiste = _context.Alumnos.Where(A => A.CarreraID == id && A.Eliminado == false).Count();
+            //si no existen alumnos relacionados
+            if (AlumnoExiste == 0)
+            {   //el estado de la carrera pasa a estar en deshabilitado
+                CarreraYaExiste.Eliminado = true;
+                _context.SaveChanges();
+                error.nonError = true;
+            }
+            else //si existen alumnos se notifica
+            {
+                error.nonError = false;
+                error.MsjError = "Hay alumnos existentes en esta Carrera";
+            }
+        }
+        else // SI ESTA DESHABILITADA SE LA HABILITA
+        {
+            CarreraYaExiste.Eliminado = false;
+            _context.SaveChanges();
+            error.nonError= true;
+        }
+    }
+    return Json(error);
+}
+ 
+
+public JsonResult CarreraRemover(int ID){
+    var error = new ValidacionError();
+    error.nonError = false;
+    error.MsjError = "No se selecciono ninguna Carrera";
+    if (ID > 0)
+    {
+        var carreraremover = _context.Carreras?.Find(ID);
+        var AlumnoExiste = _context.Alumnos?.Where(a => a.Carreras == carreraremover).ToList();
+        if (AlumnoExiste.Count() == 0)
+        {
+            _context.Remove(carreraremover);
+            _context.SaveChanges();
+            error.nonError = true;
+            error.MsjError = "La carrera se eliminó correctamente";
+            return Json(error);
+        }
+
+    }
+    return Json(error);
+}
+}
 
 
 
-
-
-
-    // //MÉTODO QUE BUSCA LAS CARRERAS EXISTENTES Y LUEGO DEVUELVE UN LISTADO:
-
-    // //CREAMOS EL MÉTODO Y LE PASAMOS COMO PARÁMETRO EL ID DE LA CARRERA, EL CUAL LE DAMOS VALOR 0
-    //  public JsonResult BuscarCarreras(int carreraID = 0)
-    // {
-    //     //CREAMOS UNA VARIABLE LLAMADA "LISTADOCARRERAS" PARA QUE SEA MAS FÁCIL Y DINÁMICO LLAMAR EL MISMO
-    //     var listadocarreras = _context.Carreras.ToList();
-
-    //     //SI EL ID QUE PASAMOS COMO PARAMETRO PREVIAMENTE ES MAYOR A 0:
-    //     if (carreraID > 0) {
-
-    //         //NOS DEVUELVE EL LISTADO DONDE: EL ID DE LA CARRERA SEA IGUAL A LOS ID QUE INGRESAN 
-    //         //COMO PARAMETRO Y QUE ESTAS CARRERAS SE ORDENEN SEGUN SU NOMBRE FORMANDO UN LISTADO
-
-    //         listadocarreras = listadocarreras.Where(c => c.CarreraID == carreraID).OrderBy(c => c.CarreraNombre).ToList();
-    //     }
-
-    //     //DEVUELVE LISTADO
-    //     return Json(listadocarreras);
-    //     //FIN
-    // }
-
-    
-    
-
-    // public JsonResult GuardarCarrera(int carreraID, string carreranombre)
-    // {
-    //     var resultado = new ValidacionError();
-    //     resultado.nonError = false;
-    //     resultado.MsjError = "No se agrego un nombre a la carrera";
-    //     //SI EL NOMBRE DE LA CARRERA NO INGRESA
-    //     if (!string.IsNullOrEmpty(carreranombre))
-    //     {
-
-    //         if(carreraID == 0){
-    //             var carreraexistente = _context.Carreras.Where(c => c.CarreraNombre == carreranombre).FirstOrDefault();
-    //             if(carreraexistente == null){
-
-    //                     var carreraCrear = new Carrera{
-    //                         CarreraNombre = carreranombre,
-    //                         // Duracion = duracion
-    //                     };
-    //                     _context.Add(carreraCrear);
-    //                     _context.SaveChanges();
-    //                     resultado.nonError = true;
-
-    //             }
-
-                     
-    //                 }
-
-    //                 else{
-    //                     //BUSCAMOS EN LA TABLA SI EXISTE UNA CON LA MISMA DESCRIPCION Y DISTINTO ID DE REGISTRO AL QUE ESTAMOS EDITANDO
-    //                     var carreraexistente = _context.Carreras.Where(c => c.CarreraNombre == carreranombre && c.CarreraID != carreraID).FirstOrDefault();
-    //                     if(carreraexistente == null){
-    //                         //crear variable que guarde el objeto segun el id deseado
-    //                         var carreraEditar = _context.Carreras.Find(carreraID);
-    //                         if(carreraEditar != null){
-    //                             carreraEditar.CarreraNombre = carreranombre;
-    //                             // carreraEditar.Duracion = duracion;
-    //                             _context.SaveChanges();
-    //                              resultado.nonError = true;
-    //                         }
-    //                     }
-                       
-           
-    //                     }                          
-    //     }
-
-    //     return Json(resultado);
-    // }
-
-
-    

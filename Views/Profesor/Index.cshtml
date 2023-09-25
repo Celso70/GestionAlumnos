@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<!-- Modal -->
+<div class="modal fade" id="ProfesorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ProfesorH1">Agregar Profesor </h5>
+        <input class="text-center" id="ProfesorHiddenInputID" value="0" disabled/>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <div id="ProfesorForm" class="form-group">
+
+            <label class="control-label">Profesor</label>
+            <input type="text" class="form-control" id="textoInput" name="ProfesorNombre" autocomplete="off" />
+            <label class="control-label">DNI</label>
+            <input type="number" class="form-control" id="textoInput" name="ProfesorDNI" autocomplete="off" />
+            <label class="control-label">Nacimiento</label>
+            <input type="datetime" class="form-control" id="ProfesorNacimiento" name="ProfesorNacimiento" autocomplete="off" />
+            <label class="control-label">Email</label>
+            <input type="text" class="form-control" id="textoInput" name="ProfesorEmail" autocomplete="off" />
+            <label class="control-label">Direccion</label>
+            <input type="text" class="form-control" id="InputDireccion" name="ProfesorDireccion" autocomplete="off" />
+            
+
+            <span class="text-danger" id="lbl-error"></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button id="btn-crear" type="button" onclick="ProfesorGuardar()" class="btn btn-primary">Crear</button>
+        
+        <input id="btnDesHabilitar" type="button" onclick="ProfesorEliminar()" class="btn btn-warning" value="Deshabilitar" />
+        <input id="btnHabilitar" type="button" onclick="ProfesorEliminar()" class="btn btn-success value="Habilitar" />
+        <button id="btnEliminar" type="button" onclick="ProfesorEliminar()" class="btn btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div>
+    <h1 class="display-4">Profesores</h1>
+
+      <!-- Button trigger modal -->
+      <div class="mb-2">
+        <button type="button" onclick="AbrirModal()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalProfesor">
+            Nuevo
+        </button>
+      </div>
+
+ 
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>N°</th>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Nacimiento</th>
+            <th>Direccion</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+        <tbody id="ProfesorTabla">        
+        </tbody>
+  </table>
+</div>
+
+ @section Scripts{
+    <script src="~/js/Profesor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/sweetalert.js"></script>
+}

@@ -8,8 +8,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <input type="hidden" id="CarreraHiddenInputID" value="0" />
-        <h5 class="modal-title" id="CarreraH1">Agregar Carrera</h5>
+        <h5 class="modal-title" id="CarreraH1">Agregar Carrera </h5>
+        <input class="text-center" id="CarreraHiddenInputID" value="0" disabled/>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -17,19 +17,22 @@
         <div id="CarreraForm" class="form-group">
 
             <label class="control-label">Carrera</label>
-            <input type="text" class="form-control" id="CarreraNombreInput" name="CarreraNombreNombre" autocomplete="off" />
+            <input type="text" class="form-control" id="textoInput" name="CarreraNombre" autocomplete="off" />
 
             <label class="control-label">Duracion</label>
             <input type="number" class="form-control" id="CarreraDuracionInput" name="CarreraDuracion" autocomplete="off" />
+            
 
             <span class="text-danger" id="lbl-error"></span>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" onclick="CarreraGuardar()" class="btn btn-primary">Guardar Cambios</button>
-        @* <button type="button" onclick="CarreraEliminar()" class="btn btn-primary">Eliminar</button>
-        <button type="button" onclick="CarreraEliminar()" class="btn btn-primary">Deshabilitar</button> *@
+        <button id="btn-crear" type="button" onclick="CarreraGuardar()" class="btn btn-primary">Crear</button>
+        
+        <input id="btnDesHabilitar" type="button" onclick="CarreraEliminar()" class="btn btn-warning" value="Deshabilitar" />
+        <input id="btnHabilitar" type="button" onclick="CarreraEliminar()" class="btn btn-success value="Habilitar" />
+        <button id="btnEliminar" type="button" onclick="CarreraEliminar()" class="btn btn-danger">Eliminar</button>
       </div>
     </div>
   </div>
@@ -41,7 +44,7 @@
 
       <!-- Button trigger modal -->
       <div class="mb-2">
-        <button type="button" onclick="CrearNueva()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalCarrera">
+        <button type="button" onclick="AbrirModal()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalCarrera">
             Nuevo
         </button>
       </div>
@@ -50,11 +53,12 @@
   <table class="table table-bordered table-striped table-condensed">
     <thead>
         <tr>
+            <th>N°</th>
             <th>Nombre</th>
             <th>Duracion</th>
         </tr>
     </thead>
-        <tbody id="tbody-carreras">        
+        <tbody id="CarrerasTabla">        
         </tbody>
   </table>
 </div>

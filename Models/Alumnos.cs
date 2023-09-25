@@ -9,7 +9,7 @@ public class Alumno {
     public DateTime AlumnoNacimiento { get; set; }
     public int CarreraID { get; set; }
     public string? CarreraNombre { get; set;}
-    public bool IsActive { get; set; }
+    public bool Eliminado { get; set; }
     public virtual Carrera? Carreras { get; set; }
     
 }

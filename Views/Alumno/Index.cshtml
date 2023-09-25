@@ -1,0 +1,73 @@
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<!-- Modal -->
+<div class="modal fade" id="AlumnoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <input id="AlumnoHiddenInputID" value="0" disabled/>
+        <h5 class="modal-title" id="AlumnoH1">Agregar Alumno</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <div id="AlumnoForm" class="form-group">
+
+            <label class="control-label">Nombre Completo</label>
+            <input type="text" class="form-control" id="AlumnoNombre" name="NombreAlumno" autocomplete="off" />
+
+            <label class="control-label">Fecha Nacimiento</label>
+            <input type="datetime" class="form-control" id="AlumnoNacimiento" name="NacimientoAlumno" />
+
+            <label class="control-label">Carrera</label>
+             @Html.DropDownList("CarreraID", null, htmlAttributes: new { @class = "form-control"})
+            <span class="text-danger" id="lbl-error"></span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button id="btn-crear" type="button" onclick="AlumnoGuardar()" class="btn btn-primary">Crear</button>
+        <input id="btnDesHabilitar" type="button" onclick="AlumnoEliminar()" class="btn botones-modals" value="Deshabilitar" />
+        <input id="btnHabilitar" type="button" onclick="AlumnoEliminar()" class="btn botones-modals" value="Habilitar" />
+         <button id="btnEliminar" type="button" onclick="AlumnoEliminar()" class="btn btn-primary">Eliminar</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div>
+    <h1 class="display-4">Alumnos</h1>
+
+      <!-- Button trigger modal -->
+      <div class="mb-2">
+        <button type="button" onclick="AbrirModal()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalAlumno">
+            Nuevo
+        </button>
+      </div>
+
+ 
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>N°</th>
+            <th>Nombre Completo</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Carrera</th>
+        </tr>
+    </thead>
+        <tbody id="AlumnosTabla">        
+        </tbody>
+  </table>
+</div>
+
+ @section Scripts{
+    <script src="~/js/Alumno.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/sweetalert.js"></script>
+}

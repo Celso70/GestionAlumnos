@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GestionAlumnos.Migrations
 {
-    public partial class MigracionInicial : Migration
+    public partial class Cambiosen : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,6 +46,39 @@ namespace GestionAlumnos.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Carreras",
+                columns: table => new
+                {
+                    CarreraID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CarreraNombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CarreraDuracion = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Eliminado = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carreras", x => x.CarreraID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Profesores",
+                columns: table => new
+                {
+                    ProfesorID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProfesorNombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfesorNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ProfesorDireccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfesorDNI = table.Column<int>(type: "int", nullable: false),
+                    ProfesorEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Eliminado = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Profesores", x => x.ProfesorID);
                 });
 
             migrationBuilder.CreateTable(
@@ -154,6 +187,34 @@ namespace GestionAlumnos.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Alumnos",
+                columns: table => new
+                {
+                    AlumnoID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AlumnoNombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AlumnoNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CarreraID = table.Column<int>(type: "int", nullable: false),
+                    CarreraNombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Eliminado = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Alumnos", x => x.AlumnoID);
+                    table.ForeignKey(
+                        name: "FK_Alumnos_Carreras_CarreraID",
+                        column: x => x.CarreraID,
+                        principalTable: "Carreras",
+                        principalColumn: "CarreraID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alumnos_CarreraID",
+                table: "Alumnos",
+                column: "CarreraID");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -197,6 +258,9 @@ namespace GestionAlumnos.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Alumnos");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -210,6 +274,12 @@ namespace GestionAlumnos.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Profesores");
+
+            migrationBuilder.DropTable(
+                name: "Carreras");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

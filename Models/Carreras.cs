@@ -8,4 +8,7 @@ public class Carrera
     public int CarreraID { get; set; }
     public string? CarreraNombre { get; set; }
     public decimal CarreraDuracion { get; set; }
+
+    public bool Eliminado { get; set; }
+    public virtual ICollection<Alumno>? Alumnos { get; set; }
 }

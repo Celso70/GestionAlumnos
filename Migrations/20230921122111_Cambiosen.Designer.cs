@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionAlumnos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230920202017_ProfesoresModel")]
-    partial class ProfesoresModel
+    [Migration("20230921122111_Cambiosen")]
+    partial class Cambiosen
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,7 +44,7 @@ namespace GestionAlumnos.Migrations
                     b.Property<string>("CarreraNombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("Eliminado")
                         .HasColumnType("bit");
 
                     b.HasKey("AlumnoID");
@@ -68,6 +68,9 @@ namespace GestionAlumnos.Migrations
                     b.Property<string>("CarreraNombre")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
+
                     b.HasKey("CarreraID");
 
                     b.ToTable("Carreras");
@@ -80,6 +83,9 @@ namespace GestionAlumnos.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProfesorID"), 1L, 1);
+
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
 
                     b.Property<int>("ProfesorDNI")
                         .HasColumnType("int");
@@ -306,7 +312,7 @@ namespace GestionAlumnos.Migrations
             modelBuilder.Entity("GestionAlumnos.Models.Alumno", b =>
                 {
                     b.HasOne("GestionAlumnos.Models.Carrera", "Carreras")
-                        .WithMany()
+                        .WithMany("Alumnos")
                         .HasForeignKey("CarreraID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -363,6 +369,11 @@ namespace GestionAlumnos.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GestionAlumnos.Models.Carrera", b =>
+                {
+                    b.Navigation("Alumnos");
                 });
 #pragma warning restore 612, 618
         }
