@@ -2,9 +2,11 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using GestionAlumnos.Models;
 using GestionAlumnos.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestionAlumnos.Controllers;
 
+[Authorize]
 public class ProfesorController : Controller
 {
     private readonly ILogger<ProfesorController> _logger;

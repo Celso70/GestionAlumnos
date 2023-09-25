@@ -191,6 +191,16 @@ function ProfesorGuardar(){
                     })
         return;
     }
+    if (DNI.length > 8) {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: 'El campo de DNI no puede tener más de 8 dígitos.',
+            showConfirmButton: false,
+            timer: 1500
+        });
+        return; // Salir de la función si la validación falla
+    }
     console.log(Direccion)
 
     $.ajax({

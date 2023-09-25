@@ -2,11 +2,15 @@
  using Microsoft.AspNetCore.Mvc;
  using GestionAlumnos.Data;
  using GestionAlumnos.Models;
+using Microsoft.AspNetCore.Authorization;
 
- namespace GestionAlumnos.Controllers;
+namespace GestionAlumnos.Controllers;
+
+[Authorize]
 
  public class CarreraController : Controller
- {
+ {  
+
     private readonly ILogger<CarreraController> _logger;
     private readonly ApplicationDbContext _context;
 

@@ -3,9 +3,11 @@ using System.Diagnostics;
  using GestionAlumnos.Data;
  using GestionAlumnos.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestionAlumnos.Controllers;
 
+[Authorize]
  public class AlumnoController : Controller
  {
     private readonly ILogger<AlumnoController> _logger;
