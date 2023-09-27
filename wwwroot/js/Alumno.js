@@ -99,32 +99,38 @@ $.ajax({
   type: 'GET',
   // el tipo de información que se espera de respuesta
   dataType: 'json',
-  success: function (Alumno) {
-    var FechaFormateada = FechaFormato(Alumno[0].alumnoNacimiento);
-      if (Alumno.length == 1) {
-          let alumno = Alumno[0];
+  success: function (Alumnos) {
+    var FechaFormateada = FechaFormato(Alumnos[0].alumnoNacimiento);
+      if (Alumnos.length == 1) {
+          let alumno = Alumnos[0];
           $("#lbl-error").text("");
           $("#AlumnoH1").text("Editar Alumno");
-          $("#AlumnoHiddenInputID").val(`${Alumno[0].alumnoID}`);
+          $("#AlumnoHiddenInputID").val(`${alumno.alumnoID}`);
           $("#AlumnoForm input[name='NombreAlumno']").val(`${alumno.alumnoNombre}`);
           $("#AlumnoForm input[name='NacimientoAlumno']").val(`${FechaFormateada}`);
-          $("#CarreraID").val(`${Alumno[0].alumnocarreraID}`);
+          $("#CarreraID").val(`${alumno.carreraID}`);
+
+
           if (!alumno.eliminado) {
               $("#btnEliminar").hide();
               $("#btnHabilitar").hide();
               $("#btnDesHabilitar").hide();
               $("#btn-crear").show();
               $("#btn-crear").text("Editar");
+              
           }
           else {
               $("#btnDesHabilitar").hide();
               $("#btnEliminar").hide();
               $("#btnHabilitar").hide();
               $("#btn-crear").show(); 
-              $("#btn-crear").text("Editar");;
+              $("#btn-crear").text("Editar");
+              
+
           }
 
           $("#AlumnoModal").modal("show");
+          
       }
   },
   error: function (xhr, status) {
