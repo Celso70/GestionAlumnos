@@ -4,6 +4,7 @@ using GestionAlumnos.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionAlumnos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230927225334_PrimeraMigracion")]
+    partial class PrimeraMigracion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,15 +31,6 @@ namespace GestionAlumnos.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AlumnoID"), 1L, 1);
-
-                    b.Property<int>("AlumnoDNI")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AlumnoDireccion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AlumnoEmail")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("AlumnoNacimiento")
                         .HasColumnType("datetime2");
@@ -78,14 +71,9 @@ namespace GestionAlumnos.Migrations
                     b.Property<bool>("Eliminado")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ProfesoresProfesorID")
-                        .HasColumnType("int");
-
                     b.HasKey("AsignaturaID");
 
                     b.HasIndex("CarreraID");
-
-                    b.HasIndex("ProfesoresProfesorID");
 
                     b.ToTable("Asignaturas");
                 });
@@ -141,62 +129,6 @@ namespace GestionAlumnos.Migrations
                     b.HasKey("ProfesorID");
 
                     b.ToTable("Profesores");
-                });
-
-            modelBuilder.Entity("GestionAlumnos.Models.ProfesorAsignatura", b =>
-                {
-                    b.Property<int>("ProfesorAsignaturaID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProfesorAsignaturaID"), 1L, 1);
-
-                    b.Property<int>("AsignaturaID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProfesorID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProfesorAsignaturaID");
-
-                    b.ToTable("ProfesoresAsignaturas");
-                });
-
-            modelBuilder.Entity("GestionTareas.Models.Tarea", b =>
-                {
-                    b.Property<int>("TareaID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TareaID"), 1L, 1);
-
-                    b.Property<int>("AsignaturaID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Eliminado")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ProfesorID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TareaDescripcion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("TareaFechaCarga")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TareaFechaVencimiento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TareaTitulo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UsuarioID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TareaID");
-
-                    b.ToTable("Tareas");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -415,18 +347,12 @@ namespace GestionAlumnos.Migrations
             modelBuilder.Entity("GestionAlumnos.Models.Asignatura", b =>
                 {
                     b.HasOne("GestionAlumnos.Models.Carrera", "Carreras")
-                        .WithMany("Asignaturas")
+                        .WithMany()
                         .HasForeignKey("CarreraID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestionAlumnos.Models.Profesor", "Profesores")
-                        .WithMany("Asignaturas")
-                        .HasForeignKey("ProfesoresProfesorID");
-
                     b.Navigation("Carreras");
-
-                    b.Navigation("Profesores");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -483,13 +409,6 @@ namespace GestionAlumnos.Migrations
             modelBuilder.Entity("GestionAlumnos.Models.Carrera", b =>
                 {
                     b.Navigation("Alumnos");
-
-                    b.Navigation("Asignaturas");
-                });
-
-            modelBuilder.Entity("GestionAlumnos.Models.Profesor", b =>
-                {
-                    b.Navigation("Asignaturas");
                 });
 #pragma warning restore 612, 618
         }

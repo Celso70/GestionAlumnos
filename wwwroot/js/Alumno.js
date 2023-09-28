@@ -50,7 +50,10 @@ window.onload = function() {
                 <tr class="bg-danger">
                     <th scope="row">${alumnos.alumnoID}</th>
                     <td>${alumnos.alumnoNombre}</td>
+                    <td>${alumnos.alumnoDireccion}</td>
                     <td>${FormatoAplicado}</td>
+                    <td>${alumnos.alumnoDNI}</td>
+                    <td>${alumnos.alumnoEmail}</td>
                     <td>${alumnos.carreraNombre}</td>
                     <td>
                       
@@ -65,7 +68,10 @@ window.onload = function() {
                 <tr>
                     <th scope="row">${alumnos.alumnoID}</th>
                     <td>${alumnos.alumnoNombre}</td>
+                    <td>${alumnos.alumnoDireccion}</td>
                     <td>${FormatoAplicado}</td>
+                    <td>${alumnos.alumnoDNI}</td>
+                    <td>${alumnos.alumnoEmail}</td>
                     <td>${alumnos.carreraNombre}</td>
                     <td>
                       <button onclick="AlumnoBuscar(${alumnos.alumnoID})">✍</button>
@@ -107,7 +113,10 @@ $.ajax({
           $("#AlumnoH1").text("Editar Alumno");
           $("#AlumnoHiddenInputID").val(`${alumno.alumnoID}`);
           $("#AlumnoForm input[name='NombreAlumno']").val(`${alumno.alumnoNombre}`);
+          $("#AlumnoForm input[name='DireccionAlumno']").val(`${alumno.alumnoDireccion}`);
           $("#AlumnoForm input[name='NacimientoAlumno']").val(`${FechaFormateada}`);
+          $("#AlumnoForm input[name='DNIAlumno']").val(`${alumno.alumnoDNI}`);
+          $("#AlumnoForm input[name='EmailAlumno']").val(`${alumno.alumnoEmail}`);
           $("#CarreraID").val(`${alumno.carreraID}`);
 
 
@@ -157,7 +166,10 @@ function FechaFormato(fecha) {
     $("#AlumnoHiddenInputID").val("0");
     $("#CarreraID").val("0");
     $("#AlumnoNombre").val("");
+    $("#AlumnoDireccion").val("");
     $("#AlumnoNacimiento").val("");
+    $("#AlumnoDNI").val("");
+    $("#AlumnoEmail").val("");
     $("#lbl-error").text("");
     $("#btnEliminar").hide();
     $("#btnHabilitar").hide();
@@ -167,10 +179,14 @@ function FechaFormato(fecha) {
 
   function AlumnoGuardar() {
     $("#lbl-error").text("");
-    let AlumnoNombre = $("#AlumnoNombre").val();
     let Id = $("#AlumnoHiddenInputID").val();
+    let AlumnoNombre = $("#AlumnoNombre").val();
+    let AlumnoDireccion = $("#AlumnoDireccion").val();
     let AlumnoNacimiento = $("#AlumnoNacimiento").val();
+    let AlumnoDNI = $("#AlumnoDNI").val();
+    let AlumnoEmail = $("#AlumnoEmail").val();
     let CarreraID = $("#CarreraID").val();
+
     if (AlumnoNombre === "") {
       Swal.fire({
           position: 'top-end',
@@ -181,29 +197,73 @@ function FechaFormato(fecha) {
                   })
       return;
   }
+  if (AlumnoDNI.length > 8) {
+    Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'El campo de DNI no puede tener más de 8 dígitos.',
+        showConfirmButton: false,
+        timer: 1500
+    });
+    return; // Salir de la función si la validación falla
+}
     $.ajax({
         url: '../../Alumno/AlumnoGuardar',
         type: 'POST',
         dataType: 'json',
-        data: {Id: Id, alumnonombre: AlumnoNombre, alumnonacimiento: AlumnoNacimiento, carreraid: CarreraID},
+        data: {Id: Id, alumnonombre: AlumnoNombre, alumnodireccion: AlumnoDireccion, alumnonacimiento: AlumnoNacimiento, alumnodni: AlumnoDNI,  alumnoemail: AlumnoEmail, carreraid: CarreraID},
         async: false,
         success: function (error) {
         
         if (Id == 0) {
           console.log(error);
           if (error.NonError) {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Alumno Creado',
+              showConfirmButton: false,
+              timer: 1500
+                      })
             $("#AlumnoModal").modal("hide");
             AlumnosBuscar();
           }
           else {
-            $("#lbl-error").text(error.MsjError);
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: 'Ya existe un alumno con ese DNI',
+              showConfirmButton: false,
+              timer: 1000
+                      })
             $("#AlumnoModal").modal("hide");
             AlumnosBuscar();
           }
         }
         else{
-          $("#AlumnoModal").modal("hide");
-          AlumnosBuscar();
+          if (error.nonError) {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Profesor Editado',
+              showConfirmButton: false,
+              timer: 1500
+                      })
+            $("#AlumnoModal").modal("hide");
+            AlumnosBuscar();
+          }
+          else{
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: 'Ha sido imposible editar ya que ya existe un Alumno con ese DNI',
+              showConfirmButton: false,
+              timer: 1500
+                      })
+            $("#AlumnoModal").modal("hide");
+            AlumnosBuscar();
+          }
+          
         }
           
         },

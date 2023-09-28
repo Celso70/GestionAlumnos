@@ -40,7 +40,7 @@ namespace GestionAlumnos.Controllers;
     }
 
 
-    public JsonResult AlumnoGuardar(int Id, string alumnonombre, DateTime alumnonacimiento, int carreraid)
+    public JsonResult AlumnoGuardar(int Id, string alumnonombre, string alumnodireccion,DateTime alumnonacimiento, int alumnodni, string alumnoemail,int carreraid)
     {
         var error = new ValidacionError();
         error.nonError = false;
@@ -55,28 +55,60 @@ namespace GestionAlumnos.Controllers;
             {
                 error.nonError = true;
                 error.MsjError = "Alumno Creado Correctamente";
-                if (Id == 0)
+
+                    if (Id == 0)
+                {
+                    var AlumnoYaExiste = _context.Alumnos?.Where(a => a.AlumnoDNI == alumnodni).FirstOrDefault();
+                    if (AlumnoYaExiste == null)
                 {
                     var Alumno = new Alumno{
                         AlumnoNombre = alumnonombre,
+                        AlumnoDireccion = alumnodireccion,
                         AlumnoNacimiento = alumnonacimiento,
+                        AlumnoDNI = alumnodni,
+                        AlumnoEmail = alumnoemail,
                         CarreraID = CarreraYaExiste.CarreraID,
                         CarreraNombre = CarreraYaExiste.CarreraNombre,
                         Eliminado = false
                     };
                     _context.Alumnos.Add(Alumno);
                     _context.SaveChanges();
-                }else{
-                    var Alumno = _context.Alumnos.Where(a => a.AlumnoID == Id).FirstOrDefault();
-                    if (Alumno != null)
+                    error.nonError = true;
+                    }
+                    else{
+                        error.nonError = false;
+                        error.MsjError = "Ya existe un Alumno con ese DNI";
+                    }
+                }
+                else
+                {
+                    var AlumnoYaExiste = _context.Alumnos?.Where(a => a.AlumnoDNI == alumnodni).FirstOrDefault();
+                    if (AlumnoYaExiste == null)
+                    {
+                        var Alumno = _context.Alumnos.Where(a => a.AlumnoID == Id).FirstOrDefault();
+                        if (Alumno != null)
                     {
                         Alumno.AlumnoNombre = alumnonombre;
+                        Alumno.AlumnoDireccion = alumnodireccion;
                         Alumno.AlumnoNacimiento = alumnonacimiento;
+                        Alumno.AlumnoDNI = alumnodni;
+                        Alumno.AlumnoEmail = alumnoemail;
                         Alumno.CarreraID = CarreraYaExiste.CarreraID;
                         Alumno.CarreraNombre = CarreraYaExiste.CarreraNombre;
                         _context.SaveChanges();
+                        error.nonError = true;
+                        error.MsjError = "Alumno editado correctamente";
                     }
+                    }
+                    else{
+                        error.nonError = false;
+                        error.MsjError = "Ya existe un Alumno con ese DNI";
+                    }
+                    
                 }
+                
+                
+                
             }
             
         }

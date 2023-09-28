@@ -19,8 +19,17 @@
             <label class="control-label">Nombre Completo</label>
             <input type="text" class="form-control" id="AlumnoNombre" name="NombreAlumno" autocomplete="off" />
 
+            <label class="control-label">Direccion</label>
+            <input type="text" class="form-control" id="AlumnoDireccion" name="DireccionAlumno" autocomplete="off" />
+
             <label class="control-label">Fecha Nacimiento</label>
             <input type="datetime" class="form-control" id="AlumnoNacimiento" name="NacimientoAlumno" />
+
+            <label class="control-label">DNI</label>
+            <input type="number" class="form-control" id="AlumnoDNI" name="DNIAlumno" autocomplete="off" />
+
+            <label class="control-label">Email</label>
+            <input type="text" class="form-control" id="AlumnoEmail" name="EmailAlumno" autocomplete="off" />
 
             <label class="control-label">Carrera</label>
              @Html.DropDownList("CarreraID", null, htmlAttributes: new { @class = "form-control"})
@@ -57,7 +66,10 @@
         <tr>
             <th>N°</th>
             <th>Nombre Completo</th>
+            <th>Direccion</th>
             <th>Fecha de Nacimiento</th>
+            <th>DNI</th>
+            <th>Email</th>
             <th>Carrera</th>
         </tr>
     </thead>

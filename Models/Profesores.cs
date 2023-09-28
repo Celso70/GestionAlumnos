@@ -11,4 +11,6 @@ public class Profesor{
     public int ProfesorDNI { get; set; }
     public string? ProfesorEmail { get; set; }
     public bool Eliminado { get; set; }
+    public virtual ICollection<Asignatura>? Asignaturas { get; set; }
+
 }

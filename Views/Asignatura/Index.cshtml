@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@*--------------------------------------------------------------------------------------------*@
+@*-----------------------------------------MODAL----------------------------------------------*@
+@*--------------------------------------------------------------------------------------------*@
+
+<div class="modal fade" id="AsignaturaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <input id="AsignaturaHiddenInputID" value="0" disabled/>
+        <h5 class="modal-title" id="AsignaturaH1">Agregar Asignatura</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <div id="AsignaturaForm" class="form-group">
+            <label class="control-label">Asignatura</label>
+
+            <input type="text" class="form-control" id="AsignaturaNombre" autocomplete="off" />
+
+            <label class="control-label">Carrera</label>
+            @* @Html.DropDownList("CarreraID", null, htmlAttributes: new { @class = "form-control"}) *@
+
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button id="BotonAsignaturaGuardar" type="button" onclick="AsignaturaGuardar()" class="btn btn-primary">Crear</button>
+      </div>
+    </div>
+  </div>
+</div>
+@*--------------------------------------------------------------------------------------------*@
+@*-----------------------------------------TABLA----------------------------------------------*@
+@*--------------------------------------------------------------------------------------------*@
+
+<h1 class="display-4">Asignaturas</h1>
+<!--ABRIR-MODAL-->
+      <div class="mb-2">
+        <button type="button" onclick="AbrirModal()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AsignaturaModal">
+            Nueva
+        </button>
+      </div>
+
+<!--TABLA-->
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Asignatura</th>
+            <th>Carrera</th>
+        </tr>
+    </thead>
+        <tbody id="AsignaturaTabla">        
+        </tbody>
+  </table>
+</div>
+
+ @section Scripts{
+    <script src="~/js/Asignatura.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/sweetalert.js"></script>
+}
