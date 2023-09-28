@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionAlumnos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230928010214_TareasModel")]
-    partial class TareasModel
+    [Migration("20230928024535_AplicativoMitre")]
+    partial class AplicativoMitre
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -162,6 +162,43 @@ namespace GestionAlumnos.Migrations
                     b.HasKey("ProfesorAsignaturaID");
 
                     b.ToTable("ProfesoresAsignaturas");
+                });
+
+            modelBuilder.Entity("GestionTareas.Models.Tarea", b =>
+                {
+                    b.Property<int>("TareaID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TareaID"), 1L, 1);
+
+                    b.Property<int>("AsignaturaID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProfesorID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TareaDescripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TareaFechaCarga")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TareaFechaVencimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TareaTitulo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsuarioID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TareaID");
+
+                    b.ToTable("Tareas");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

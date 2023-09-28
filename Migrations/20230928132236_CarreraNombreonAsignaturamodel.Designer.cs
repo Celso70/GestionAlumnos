@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionAlumnos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230927230532_CamposenAlumnos")]
-    partial class CamposenAlumnos
+    [Migration("20230928132236_CarreraNombreonAsignaturamodel")]
+    partial class CarreraNombreonAsignaturamodel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,12 +77,20 @@ namespace GestionAlumnos.Migrations
                     b.Property<int>("CarreraID")
                         .HasColumnType("int");
 
+                    b.Property<string>("CarreraNombre")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Eliminado")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("ProfesoresProfesorID")
+                        .HasColumnType("int");
 
                     b.HasKey("AsignaturaID");
 
                     b.HasIndex("CarreraID");
+
+                    b.HasIndex("ProfesoresProfesorID");
 
                     b.ToTable("Asignaturas");
                 });
@@ -157,6 +165,43 @@ namespace GestionAlumnos.Migrations
                     b.HasKey("ProfesorAsignaturaID");
 
                     b.ToTable("ProfesoresAsignaturas");
+                });
+
+            modelBuilder.Entity("GestionTareas.Models.Tarea", b =>
+                {
+                    b.Property<int>("TareaID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TareaID"), 1L, 1);
+
+                    b.Property<int>("AsignaturaID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProfesorID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TareaDescripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TareaFechaCarga")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TareaFechaVencimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TareaTitulo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsuarioID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TareaID");
+
+                    b.ToTable("Tareas");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -375,12 +420,18 @@ namespace GestionAlumnos.Migrations
             modelBuilder.Entity("GestionAlumnos.Models.Asignatura", b =>
                 {
                     b.HasOne("GestionAlumnos.Models.Carrera", "Carreras")
-                        .WithMany()
+                        .WithMany("Asignaturas")
                         .HasForeignKey("CarreraID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GestionAlumnos.Models.Profesor", "Profesores")
+                        .WithMany("Asignaturas")
+                        .HasForeignKey("ProfesoresProfesorID");
+
                     b.Navigation("Carreras");
+
+                    b.Navigation("Profesores");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -437,6 +488,13 @@ namespace GestionAlumnos.Migrations
             modelBuilder.Entity("GestionAlumnos.Models.Carrera", b =>
                 {
                     b.Navigation("Alumnos");
+
+                    b.Navigation("Asignaturas");
+                });
+
+            modelBuilder.Entity("GestionAlumnos.Models.Profesor", b =>
+                {
+                    b.Navigation("Asignaturas");
                 });
 #pragma warning restore 612, 618
         }

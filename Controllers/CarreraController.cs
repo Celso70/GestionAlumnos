@@ -23,6 +23,7 @@ namespace GestionAlumnos.Controllers;
 
      public IActionResult Index()
      {
+        
          return View();
      }
 
@@ -31,7 +32,14 @@ namespace GestionAlumnos.Controllers;
         var CarrerasListado = _context.Carreras?.ToList();
         if (Id > 0)
         {
-            CarrerasListado = CarrerasListado?.Where(c => c.CarreraID == Id).OrderBy(c =>c.CarreraNombre).ToList();
+            CarrerasListado = CarrerasListado?.Where(c => c.CarreraID == Id)
+            .OrderBy(c =>c.CarreraNombre).ToList();
+        }
+        else
+        {
+            CarrerasListado = CarrerasListado?
+            .OrderBy(c => c.CarreraNombre)
+            .ToList();
         }
         return Json(CarrerasListado);
     }

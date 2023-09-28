@@ -75,6 +75,9 @@ namespace GestionAlumnos.Migrations
                     b.Property<int>("CarreraID")
                         .HasColumnType("int");
 
+                    b.Property<string>("CarreraNombre")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Eliminado")
                         .HasColumnType("bit");
 

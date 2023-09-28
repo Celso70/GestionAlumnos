@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GestionAlumnos.Migrations
 {
-    public partial class PrimeraMigracion : Migration
+    public partial class AplicativoMitre : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -79,6 +79,40 @@ namespace GestionAlumnos.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Profesores", x => x.ProfesorID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProfesoresAsignaturas",
+                columns: table => new
+                {
+                    ProfesorAsignaturaID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProfesorID = table.Column<int>(type: "int", nullable: false),
+                    AsignaturaID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProfesoresAsignaturas", x => x.ProfesorAsignaturaID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tareas",
+                columns: table => new
+                {
+                    TareaID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TareaFechaCarga = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TareaFechaVencimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TareaTitulo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TareaDescripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AsignaturaID = table.Column<int>(type: "int", nullable: false),
+                    ProfesorID = table.Column<int>(type: "int", nullable: false),
+                    Eliminado = table.Column<bool>(type: "bit", nullable: false),
+                    UsuarioID = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tareas", x => x.TareaID);
                 });
 
             migrationBuilder.CreateTable(
@@ -194,7 +228,10 @@ namespace GestionAlumnos.Migrations
                     AlumnoID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AlumnoNombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AlumnoDireccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AlumnoNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AlumnoDNI = table.Column<int>(type: "int", nullable: false),
+                    AlumnoEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CarreraID = table.Column<int>(type: "int", nullable: false),
                     CarreraNombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false)
@@ -218,7 +255,8 @@ namespace GestionAlumnos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AsignaturaNombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CarreraID = table.Column<int>(type: "int", nullable: false),
-                    Eliminado = table.Column<bool>(type: "bit", nullable: false)
+                    Eliminado = table.Column<bool>(type: "bit", nullable: false),
+                    ProfesoresProfesorID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -229,6 +267,11 @@ namespace GestionAlumnos.Migrations
                         principalTable: "Carreras",
                         principalColumn: "CarreraID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Asignaturas_Profesores_ProfesoresProfesorID",
+                        column: x => x.ProfesoresProfesorID,
+                        principalTable: "Profesores",
+                        principalColumn: "ProfesorID");
                 });
 
             migrationBuilder.CreateIndex(
@@ -240,6 +283,11 @@ namespace GestionAlumnos.Migrations
                 name: "IX_Asignaturas_CarreraID",
                 table: "Asignaturas",
                 column: "CarreraID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Asignaturas_ProfesoresProfesorID",
+                table: "Asignaturas",
+                column: "ProfesoresProfesorID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -305,10 +353,16 @@ namespace GestionAlumnos.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Profesores");
+                name: "ProfesoresAsignaturas");
+
+            migrationBuilder.DropTable(
+                name: "Tareas");
 
             migrationBuilder.DropTable(
                 name: "Carreras");
+
+            migrationBuilder.DropTable(
+                name: "Profesores");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

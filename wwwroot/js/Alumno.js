@@ -211,13 +211,18 @@ function FechaFormato(fecha) {
         url: '../../Alumno/AlumnoGuardar',
         type: 'POST',
         dataType: 'json',
-        data: {Id: Id, alumnonombre: AlumnoNombre, alumnodireccion: AlumnoDireccion, alumnonacimiento: AlumnoNacimiento, alumnodni: AlumnoDNI,  alumnoemail: AlumnoEmail, carreraid: CarreraID},
-        async: false,
-        success: function (error) {
+        data: {Id: Id, alumnonombre: AlumnoNombre, 
+              alumnodireccion: AlumnoDireccion, 
+              alumnonacimiento: AlumnoNacimiento, 
+              alumnodni: AlumnoDNI,  
+              alumnoemail: AlumnoEmail, 
+              carreraid: CarreraID},
+              async: false,
+              success: function (error) {
         
         if (Id == 0) {
-          console.log(error);
-          if (error.NonError) {
+          if (error.nonError) {
+           
             Swal.fire({
               position: 'top-end',
               icon: 'success',
@@ -228,7 +233,8 @@ function FechaFormato(fecha) {
             $("#AlumnoModal").modal("hide");
             AlumnosBuscar();
           }
-          else {
+           else{
+            
             Swal.fire({
               position: 'top-end',
               icon: 'error',
@@ -242,10 +248,11 @@ function FechaFormato(fecha) {
         }
         else{
           if (error.nonError) {
+            
             Swal.fire({
               position: 'top-end',
               icon: 'success',
-              title: 'Profesor Editado',
+              title: 'Alumno Editado',
               showConfirmButton: false,
               timer: 1500
                       })
@@ -253,10 +260,11 @@ function FechaFormato(fecha) {
             AlumnosBuscar();
           }
           else{
+            
             Swal.fire({
               position: 'top-end',
               icon: 'error',
-              title: 'Ha sido imposible editar ya que ya existe un Alumno con ese DNI',
+              title: 'Para editar debe ingresar un DNI que no pertenezca a otro Alumno',
               showConfirmButton: false,
               timer: 1500
                       })
