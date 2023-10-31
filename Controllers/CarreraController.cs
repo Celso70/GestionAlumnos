@@ -171,6 +171,22 @@ public JsonResult CarreraRemover(int ID){
     }
     return Json(error);
 }
+
+public JsonResult GraficoCarreraAlumno()
+    {
+        var carreras = _context.Carreras.ToList();
+        var labels = new List<string>();
+        var data = new List<int>();
+        foreach (var carrera in carreras)
+        {
+            var alumnos = _context.Alumnos.Where(a => a.CarreraID == carrera.CarreraID).Count();
+            labels.Add(carrera.CarreraNombre);
+            data.Add(alumnos);
+        }
+        var resultado = new { Labels = labels, data = data };
+
+        return Json(resultado);
+    }
 }
 
 

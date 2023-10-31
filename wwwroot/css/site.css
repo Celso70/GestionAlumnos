@@ -19,10 +19,65 @@ body {
 
 #AlumnosEdades {
   max-height: 80% !important;
-  width: 90% !important;
+  width: 50% !important;
   margin-inline: 2% !important;
   position: fixed;
   transition: all 0.5s ease-in-out;
-  left: 1rem;
-  top: 8rem;
 }
+#CarreraAlumnos {
+  max-height: 80% !important;
+  width: 50% !important;
+  margin-inline: 2% !important;
+  position: fixed;
+  transition: all 0.5s ease-in-out;
+ 
+}
+.btn-esconder{
+  font-weight: 500;
+  box-shadow: 2px 2px 7px gray !important;
+  border: 1px solid gray !important;
+  position: absolute;
+  right: 1rem;
+  font-size: 1.6vw !important;
+  z-index: 2;
+}
+
+.btn-esconder {
+  appearance: none;
+  background-color: transparent;
+  border: 0.125em solid #1A1A1A;
+  border-radius: 0.9375em;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 16px;
+  font-weight: 600; 
+  line-height: normal;
+  margin: 0;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);;
+  touch-action: manipulation;
+  will-change: transform;
+  position: relative;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  right: -100%;
+  font-style: italic;
+ }
+ 
+ 
+ .btn-esconder:disabled {
+  pointer-events: none;
+ }
+ 
+ .btn-esconder:hover {
+  color: #fff;
+  background-color: #1A1A1A;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+ }
+ 
+ .btn-esconder:active {
+  box-shadow: none;
+  transform: translateY(0);
+ }
