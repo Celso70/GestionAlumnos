@@ -53,6 +53,163 @@ function AbrirModal() {
     $("#btn-crear").show();
     $("#btn-crear").text("Crear");
 }
+//PROFESORESASIGNATURAS////
+
+function ProfesorAsignaturaBuscar(id) {
+
+    $.ajax({
+        // la URL para la petición
+        url: '../../Profesor/ProfesoresBuscar',
+        // la información a enviar
+        // (también es posible utilizar una cadena de datos)
+        data: { Id: id },
+        // especifica si será una petición POST o GET
+        type: 'GET',
+        // el tipo de información que se espera de respuesta
+        dataType: 'json',
+        success: function (Profesor) {
+            if (Profesor.length == 1) {
+                let profesoryasignatura = Profesor[0];
+                $("#ProfesoresAsignaturasHiddenInputID").val(profesoryasignatura.profesorID);
+                ProfesoresAsignaturasBuscar();
+                $("#ProfesoresAsignaturasModal").modal("show");
+            }
+            
+            
+        },
+        error: function (xhr, status) {
+            alert('Error al cargar asignaturas del profe');
+        },
+
+        // código a ejecutar sin importar si la petición falló o no
+        complete: function (xhr, status) {
+            //alert('Petición realizada');
+        }
+    })
+}
+function ProfesoresAsignaturasBuscar() {
+    let profesoresAsignaturasID = $("#ProfesoresAsignaturasHiddenInputID").val();
+console.log(profesoresAsignaturasID)
+    $("#ProfesoresAsignaturasTabla").empty(); 
+    $.ajax({
+        // la URL para la petición
+        url: '../../Profesor/ProfesoresAsignaturasBuscar',
+        // la información a enviar
+        // (también es posible utilizar una cadena de datos)
+        data: {ProfesorAsignaturaID: profesoresAsignaturasID},
+        // especifica si será una petición POST o GET
+        type: 'GET',
+        // el tipo de información que se espera de respuesta
+        dataType: 'json',
+        // código a ejecutar si la petición es satisfactoria;
+        // la respuesta es pasada como argumento a la función
+        success: function (detalleprofesorasignatura) {
+            console.log(detalleprofesorasignatura)
+            $("#ProfesoresAsignaturasTabla").empty(); 
+            $.each(detalleprofesorasignatura, function (index, asignatura) {
+                console.log("foreach")
+                //  let boton = '<td><button onclick="ProfesorAsignaturaEliminar(${asignatura.profesoresAsignaturasID})">🗑Eliminar</button></td>'
+                 
+                $("#ProfesoresAsignaturasTabla").append(`
+                <tr>
+                    <td>${asignatura.asignaturaNombre}</td>
+                    <td><button onclick="ProfesorAsignaturaEliminar(${asignatura.profesoresAsignaturasID})">🗑</button></td>
+                       </tr>`);
+                    // '<tr>' +
+
+                    // '<td>' + asignatura.asignaturaNombre + '</td>' +
+                   
+                    // '<td>' + boton + '</td>' +
+                    // '</tr>'
+                     
+                
+            })
+
+        },
+    })
+}
+
+function ProfesoresAsignaturasGuardar() {
+    let profesorid = $("#ProfesoresAsignaturasHiddenInputID").val();
+    let asignaturaid = $("#AsignaturaID").val();
+
+    $.ajax({
+        // la URL para la petición
+        url: '../../Profesor/ProfesoresAsignaturasGuardar',
+        // la información a enviar
+        // (también es posible utilizar una cadena de datos)
+        data: { AsignaturaID: asignaturaid, ProfesorID: profesorid},
+        // especifica si será una petición POST o GET
+        type: 'POST',
+        // el tipo de información que se espera de respuesta
+        dataType: 'json',
+        // código a ejecutar si la petición es satisfactoria;
+        // la respuesta es pasada como argumento a la función
+        success: function (resultado) {
+            
+                if (resultado) {
+                    $("#ProfesoresAsignaturasModal").modal("hide");
+                    ProfesoresAsignaturasBuscar();
+                }
+                else{
+                    alert("No se pudo")
+                    ProfesoresAsignaturasBuscar();
+                }
+    
+            
+        },
+        error: function (xhr, status) {
+            alert('Error al cargar asignaturas');
+        },
+
+        // código a ejecutar sin importar si la petición falló o no
+        complete: function (xhr, status) {
+            //alert('Petición realizada');
+        }
+    })
+}
+
+function ProfesorAsignaturaEliminar(ProfesorAsignaturaID) 
+{
+    console.log(ProfesorAsignaturaID)
+    $.ajax({
+        // la URL para la petición
+        url: '../../Profesor/ProfesoresAsignaturasEliminar',
+        // la información a enviar
+        // (también es posible utilizar una cadena de datos)
+        data: { ProfesorAsignaturaID: ProfesorAsignaturaID },
+        // especifica si será una petición POST o GET
+        type: 'POST',
+        // el tipo de información que se espera de respuesta
+        dataType: 'json',
+        // código a ejecutar si la petición es satisfactoria;
+        // la respuesta es pasada como argumento a la función
+        success: function (resultado) {
+            if (resultado == true) {
+              
+                ProfesoresAsignaturasBuscar();
+                
+            }
+            else { 
+                    alert("error al eliminar la asignatura")
+            }
+            
+        },
+        // código a ejecutar si la petición falla;
+        // son pasados como argumentos a la función
+        // el objeto de la petición en crudo y código de estatus de la petición
+        error: function (xhr, status) {
+            alert('Disculpe, existió un problema');
+            $("#ProfesoresAsignaturasModal").modal("hide");
+            ProfesoresAsignaturasBuscar();
+        }
+    });
+}
+
+
+
+//PROFESORESASIGNATURAS-FIN//
+
 
 function ProfesoresBuscar() {
     let ProfesorTabla = $("#ProfesorTabla");
@@ -82,6 +239,7 @@ function ProfesoresBuscar() {
                                 <td>${FormatoAplicado}</td>
                                 <td>${profesor.profesorDireccion}</td>
                                 <td>${profesor.profesorEmail}</td>
+                                <td><button onclick="ProfesorAsignaturaBuscar(${profesor.profesorID})">👁</button></td>
                                 <td>
                                     <td><button onclick="ProfesorRemover(${profesor.profesorID})">🗑Eliminar</button></td>
                                     <td><button onclick="ProfesorEliminar(${profesor.profesorID})">✔</button></td>
@@ -96,6 +254,7 @@ function ProfesoresBuscar() {
                             <td>${FormatoAplicado}</td>
                             <td>${profesor.profesorDireccion}</td>
                             <td>${profesor.profesorEmail}</td>
+                            <td><button onclick="ProfesorAsignaturaBuscar(${profesor.profesorID})">👁</button></td>
                                 <td>
                                     <td><button onclick="ProfesorBuscar(${profesor.profesorID})">✍</button></td>
                                     <td><button onclick="ProfesorRemover(${profesor.profesorID})">🗑Eliminar</button></td>

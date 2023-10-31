@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionAlumnos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230928024535_AplicativoMitre")]
-    partial class AplicativoMitre
+    [Migration("20231011115818_TareasABM")]
+    partial class TareasABM
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,6 +76,9 @@ namespace GestionAlumnos.Migrations
 
                     b.Property<int>("CarreraID")
                         .HasColumnType("int");
+
+                    b.Property<string>("CarreraNombre")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Eliminado")
                         .HasColumnType("bit");
@@ -177,9 +180,6 @@ namespace GestionAlumnos.Migrations
 
                     b.Property<bool>("Eliminado")
                         .HasColumnType("bit");
-
-                    b.Property<int>("ProfesorID")
-                        .HasColumnType("int");
 
                     b.Property<string>("TareaDescripcion")
                         .HasColumnType("nvarchar(max)");

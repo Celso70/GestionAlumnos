@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using GestionAlumnos.Models;
 using GestionAlumnos.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GestionAlumnos.Controllers;
 
@@ -14,15 +15,82 @@ public class ProfesorController : Controller
 
     public ProfesorController(ApplicationDbContext context, ILogger<ProfesorController> logger)
     {
+    
         _context = context;
         _logger = logger;
     }
 
     public IActionResult Index()
     {
-        return View();
+        var Asignatura = _context.Asignaturas?
+        .ToList();
+        ViewBag.AsignaturaID
+         = new SelectList (Asignatura?
+         .OrderBy(p => p.AsignaturaNombre),
+         "AsignaturaID",
+         "AsignaturaNombre");
+
+    return View();
+    }
+    ///////PROFESORESASIGNATURAS-INICIO/////////////
+        public JsonResult ProfesoresAsignaturasBuscar(int ProfesorAsignaturaID = 0){
+        
+        List<DetalleProfesorAsignatura> detalleprofesorasignatura = new List<DetalleProfesorAsignatura>();
+
+        var asignaturas = _context.ProfesoresAsignaturas.Where(p => p.ProfesorID == ProfesorAsignaturaID).ToList();
+
+
+        foreach (var asignatura in asignaturas.OrderBy(a => a.AsignaturaID).ToList())
+        {
+            var asignaturanombre = _context.Asignaturas.Where(c => c.AsignaturaID == asignatura.AsignaturaID).Select(c => c.AsignaturaNombre).SingleOrDefault();
+
+            var detalleProfesorAsignatura = new DetalleProfesorAsignatura
+                {
+                    ProfesorID = asignatura.ProfesorID,
+                    AsignaturaID = asignatura.AsignaturaID,
+                    ProfesorAsignaturaID = asignatura.ProfesorAsignaturaID,
+                    AsignaturaNombre = asignaturanombre,
+                };
+            detalleprofesorasignatura.Add(detalleProfesorAsignatura);
+        }
+        return Json(detalleprofesorasignatura);
     }
 
+    public JsonResult ProfesoresAsignaturasGuardar(int ProfesorID, int AsignaturaID)
+    {
+        bool resultado = false;
+
+        var asignaturaencontrar = _context.ProfesoresAsignaturas.Where(p => p.AsignaturaID == AsignaturaID).Count();
+        if (asignaturaencontrar == 0)
+        {
+            var profesorasignaturaguardar = new ProfesorAsignatura
+            {
+                ProfesorID = ProfesorID,
+                AsignaturaID = AsignaturaID,
+            };
+            _context.Add(profesorasignaturaguardar);
+            _context.SaveChanges();
+            resultado = true;
+        }
+        return Json(resultado);
+
+    }
+    public JsonResult ProfesoresAsignaturasEliminar(int ProfesorAsignaturaID)
+    {
+        bool resultado = false;
+
+        var profesorasignaturaeliminar = _context.ProfesoresAsignaturas.FirstOrDefault(p => p.ProfesorAsignaturaID == ProfesorAsignaturaID);
+
+        if (profesorasignaturaeliminar != null)
+        {
+            _context.ProfesoresAsignaturas.Remove(profesorasignaturaeliminar);
+            _context.SaveChanges();
+            resultado = true;
+        }
+        return Json(resultado);
+    }
+ ///////PROFESORESASIGNATURAS-FIN/////////////
+ 
     public JsonResult ProfesoresBuscar(int Id = 0)
     {
         var ProfesoresListado = _context.Profesores?.ToList();

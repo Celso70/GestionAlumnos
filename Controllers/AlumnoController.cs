@@ -167,5 +167,37 @@ namespace GestionAlumnos.Controllers;
         }
         return Json(error);
     }
+
+    public JsonResult GraficoAlumnoEdades()
+    {
+        var alumnos = _context.Alumnos.ToList();
+        var data = new List<int>() { 0, 0, 0, 0, 0,   };
+        foreach (var alumno in alumnos)
+        {
+            var años = DateTime.Now.Year - alumno.AlumnoNacimiento.Year;
+            if (años <= 20) //menor de 20
+            {
+                data[0]++;  
+            }
+            else if(años > 20 && años <= 25) //21 a 25
+            {
+                data[1]++; 
+            }
+            else if(años > 25 && años <= 30) //26 a 30
+            {
+                data[2]++; 
+            }
+            else if(años > 30 && años <= 35) // 30 a 35
+            {
+                data[3]++; 
+            }
+            else if(años > 35) // >35
+            {
+                data[4]++; 
+            }
+        }
+        var resultado = new { data = data };
+        return Json(resultado);
+    }
     
      }

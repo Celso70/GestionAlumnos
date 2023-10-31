@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@*--------------------------------------------------------------------------------------------*@
+@*-----------------------------------------MODAL----------------------------------------------*@
+@*--------------------------------------------------------------------------------------------*@
+
+<div class="modal fade" id="TareaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <input id="TareaHiddenInputID" value="0" disabled/>
+        <h5 class="modal-title" id="TareaModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      
+        <div id="TareaForm" class="form-group">
+          
+            <label class="control-label">Titulo</label>
+            <input type="text" class="form-control" style="text-transform: uppercase;"
+                                autocomplete="off" id="TareaTitulo" onkeyup="this.value = this.value.toUpperCase()" />
+
+            <label class="control-label">Fecha de Inicio</label>
+
+            <input type="date" class="form-control" id="TareaFechaCarga" autocomplete="off" onkeydown="return false"/>
+
+            <label class="control-label">Fecha de Vencimiento</label>
+
+            <input type="date" class="form-control" id="TareaFechaVencimiento" autocomplete="off" onkeydown="return false"/>
+
+            <label class="control-label">Descripcion</label>
+
+            <textarea class="form-control" autocomplete="off" id="TareaDescripcion"></textarea>
+
+            <label>Seleccionar Asignatura</label>
+            @Html.DropDownList("AsignaturaID", null, htmlAttributes: new { @class = "form-control" })
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" onclick="GuardarTarea()" class="btn btn-primary">Crear</button>
+      </div>
+    </div>
+  </div>
+</div>
+@*--------------------------------------------------------------------------------------------*@
+@*-----------------------------------------TABLA----------------------------------------------*@
+@*--------------------------------------------------------------------------------------------*@
+
+<h1>Tareas</h1>
+<!--ABRIR-MODAL-->
+      <div class="mb-2">
+        <button type="button" onclick="AbrirModal()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TareaModal">
+            Nuevo
+        </button>
+      </div>
+
+<!--TABLA-->
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>Titulo</th>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Vto</th>
+            <th>Descripcion</th>
+            <th>Asignatura</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+    </thead>
+        <tbody id="TareaTabla">        
+        </tbody>
+  </table>
+</div>
+
+ @section Scripts{
+    <script src="~/js/Tarea.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/sweetalert.js"></script>
+}

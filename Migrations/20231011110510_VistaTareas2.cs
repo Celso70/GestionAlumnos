@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GestionAlumnos.Migrations
 {
-    public partial class AplicativoMitre : Migration
+    public partial class VistaTareas2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -106,7 +106,6 @@ namespace GestionAlumnos.Migrations
                     TareaTitulo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TareaDescripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AsignaturaID = table.Column<int>(type: "int", nullable: false),
-                    ProfesorID = table.Column<int>(type: "int", nullable: false),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false),
                     UsuarioID = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -255,6 +254,7 @@ namespace GestionAlumnos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AsignaturaNombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CarreraID = table.Column<int>(type: "int", nullable: false),
+                    CarreraNombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Eliminado = table.Column<bool>(type: "bit", nullable: false),
                     ProfesoresProfesorID = table.Column<int>(type: "int", nullable: true)
                 },

@@ -27,8 +27,111 @@ window.onload = function() {
     }
   });
   AlumnosBuscar();
+  GraficoAlumnoEdades();
 }
 
+function GraficoAlumnoEdades() {
+  console.log("Alumno");
+  $.ajax({
+    url: "../../Alumno/GraficoAlumnoEdades",
+    data: {},
+    type: "GET",
+    dataType: "json",
+
+    success: function (resultado) {
+      console.log();
+      const ctx = document.getElementById("AlumnosEdades");
+
+      function generateRandomColor() {
+        var letters = "0123456789ABCDEF";
+        var color = "#";
+        for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
+      // var labels = resultado.labels;
+      var data = resultado.data;
+      console.log(data);
+      var labels = [
+        "Menor de 20",
+        "21 a 25",
+        "26 a 30",
+        "30 a 35",
+        "Mayor de 35",
+      ];
+      console.log(labels);
+      var backgroundColors = labels.map(function () {
+        return generateRandomColor();
+      });
+
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "# de Estudiantes",
+              data: data,
+              fill: false,
+              borderColor: "rgb(75, 192, 192)",
+              tension: 0.2,
+            },
+          ],
+        },
+        options: {
+          // scales: {
+          //   2:0
+          // },
+          elements: {
+            line: {
+              tension: 0.3,
+              // fill: true,
+              borderWidth: 6,
+              backgroundColor: "#666",
+            },
+          },
+        },
+      });
+    },
+
+    error: function (xhr, status) {
+      alert("Error al cargar alumnos");
+    },
+  });
+}
+
+var escondido = true;
+$("#AlumnosEdades").css({
+  opacity: 0,
+  "z-index": -1,
+});
+
+function esconder() {
+  if (escondido == true) {
+    escondido = false;
+    $("#AlumnosEdades").css({
+      opacity: 1,
+      "z-index": 1,
+    });
+    $("#AlumnosTabla").css({
+      opacity: 0,
+      "z-index": -1,
+    });
+  } else {
+    escondido = true;
+    $("#AlumnosEdades").css({
+      opacity: 0,
+      "z-index": -1,
+    });
+    $("#AlumnosEdades").show();
+    $("#AlumnosTabla").css({
+      opacity: 1,
+      "z-index": 1,
+    });
+  }
+}
 
 
   function AlumnosBuscar() {
