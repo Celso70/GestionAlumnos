@@ -30,6 +30,8 @@ window.onload = function() {
   GraficoAlumnoEdades();
 }
 
+
+
 function GraficoAlumnoEdades() {
   console.log("Alumno");
   $.ajax({

@@ -13,7 +13,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        
+
         <div id="AlumnoForm" class="form-group">
 
             <label class="control-label">Nombre Completo</label>
@@ -43,7 +43,7 @@
         <input id="btnDesHabilitar" type="button" onclick="AlumnoEliminar()" class="btn botones-modals" value="Deshabilitar" />
         <input id="btnHabilitar" type="button" onclick="AlumnoEliminar()" class="btn botones-modals" value="Habilitar" />
          <button id="btnEliminar" type="button" onclick="AlumnoEliminar()" class="btn btn-primary">Eliminar</button>
-        
+
       </div>
     </div>
   </div>
@@ -58,6 +58,7 @@
         <button type="button" onclick="AbrirModal()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalAlumno">
             Nuevo
         </button>
+
       </div>
 <div>
   <canvas id="AlumnosEdades" style="opacity: 0;"></canvas>
@@ -71,8 +72,9 @@
   </svg>
   Edades
 </div>
- 
-  <table class="table table-bordered table-striped table-condensed">
+
+<button onclick="CrearPDF()">PDF</button>
+  <table id="table-alumno" class="table table-bordered table-striped table-condensed">
     <thead>
         <tr>
             <th>N°</th>
@@ -84,7 +86,7 @@
             <th>Carrera</th>
         </tr>
     </thead>
-        <tbody id="AlumnosTabla">        
+        <tbody id="AlumnosTabla">
         </tbody>
   </table>
 </div>
@@ -96,5 +98,65 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/js/sweetalert.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <script src="~/lib/jspdf/jspdf.umd.js"></script>
+    <script src="~/lib/jspdf/jspdf.plugin.autotable.js"></script>
 }
+
+<script>
+    function CrearPDF(){
+        var doc = new jspdf.jsPDF();
+        var totalPagesExp = '{total_pages_count_string}';
+
+        doc.autoTable({
+            html: '#table-alumno',
+            willDrawPage: function (data) {
+                // Header
+                doc.setFontSize(20)
+                doc.setTextColor(40)
+                doc.text('Alumnos', data.settings.margin.left + 15, 22)
+            },
+            columns: [
+            {dataKey: 'Nombre Completo', title: 'Nombre Completo'},
+            {dataKey: 'Direccion', title: 'Direccion'},
+            {dataKey: 'Fecha de Nacimiento', title: 'Fecha de Nacimiento'},
+            {dataKey: 'DNI', title: 'DNI'},
+            {dataKey: 'Email', title: 'Email'},
+            {dataKey: 'Carrera', title: 'Carrera'}
+            ],
+            bodyStyles: {minCellHeight: 10},
+            theme:'grid',
+            headStyles: { fillColor: [45, 26, 22] },
+            columnStyles: { 1: { halign: 'center'} },
+            didDrawCell:function (data){
+                if(data.column.index === 1 && data.cell.section === "body"){
+                    var td = data.cell.raw;
+                    var dim = 20;
+                    var xPosition = data.cell.x + 2.5;
+                    var yPosition = data.cell.y + 2.5;
+                }
+            },
+            didDrawPage: function (data) {
+                // Footer
+                var str = 'pagina ' + doc.internal.getNumberOfPages()
+                // Total page number plugin only available in jspdf v1.0+
+                if (typeof doc.putTotalPages === 'function') {
+                    str = str + ' de ' + totalPagesExp
+                }
+                doc.setFontSize(10)
+
+                // jsPDF 1.4+ uses getHeight, <1.4 uses .height
+                var pageSize = doc.internal.pageSize
+                var pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
+                doc.text(str, data.settings.margin.left, pageHeight - 10)
+            },
+            margin: { top: 30 }
+        });
+        if (typeof doc.putTotalPages === 'function') {
+            doc.putTotalPages(totalPagesExp)
+        }
+        var dia = new Date();
+        dia = `${dia.getDate()}-${dia.getMonth() + 1}-${dia.getYear()}`;
+        doc.save(`Alumnos${dia}.pdf`);
+
+    }
+</script>
